@@ -1,0 +1,729 @@
+
+
+
+# Step 1: Get the interface associated with the route to 10.14.1.2
+vlan_iface=$(ip route get 10.14.1.2 | grep -oP "(?<= dev )[^ ]+")
+
+# Step 2: Extract VLAN ID from interface name (assumes format vlanXXX)
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+
+# Step 3: Get the physical (parent) interface for the VLAN
+# This assumes ip -d link gives "link/ether ... vlan id XXX link enoXXX"
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+
+
+sudo tcpdump -B 4096 -n -i $interface vlan $vlan_id -j adapter --time-stamp-precision=nano -s 64 tcp dst portrange 50000-59600 -w egress_cap1.pcap
+
+
+
+use with c6620 nodes and ubuntu 24
+-----------------------------------------------------------
+
+ADD THE IP.LEN FIELD TO THESE CAPTURE SCRIPTS
+
+
+vlan_iface=$(ip route get 10.14.1.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w egress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.14.2.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w egress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.1.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w ingress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.10.5.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w ingress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.9.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w ingress_cap3.pcap
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*--*************-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*********----------*-*-
+
+
+
+
+
+
+
+
+
+
+
+
+
+BELOW USES -J ADAPTER_UNSYNCED!!!
+
+
+
+
+
+
+
+
+
+
+vlan_iface=$(ip route get 10.14.1.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w egress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.14.2.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w egress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.1.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.10.5.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.9.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap3.pcap
+
+
+
+
+
+
+
+
+
+----------------------------
+
+
+
+
+vlan_iface=$(ip route get 10.14.1.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$vlan_iface" tcp dst portrange 50000-59600 --time-stamp-precision=nano -s 64 -w egress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.14.2.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$vlan_iface" tcp dst portrange 50000-59600 --time-stamp-precision=nano -s 64 -w egress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.1.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.10.5.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.9.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap3.pcap
+
+
+
+
+
+
+
+
+
+# set ring buffer sizes if too many drops
+#check
+ethtool -g enp65s0f0np0
+#set
+sudo ethtool -G enp65s0f0np0 rx 8192 tx 8192
+
+
+
+
+tcpdump -i enp65s0f0np0 --list-time-stamp-types
+
+sudo apt-get update
+sudo apt install linuxptp
+sudo apt install tshark
+
+ls -l /sys/class/net/en*/device/ptp
+
+ethtool -T enp23s0f0np0
+
+
+ps -ef | grep -E 'ntpd|chronyd|timesyncd' | grep -v grep
+
+sudo systemctl stop chronyd
+sudo systemctl disable chronyd
+
+#to sync nic to the system clock
+sudo phc2sys -s CLOCK_REALTIME -c /dev/ptp1 -O 0 -r -m
+
+#to sync system clock to the nic 
+sudo phc2sys -s /dev/ptp2 -c CLOCK_REALTIME -O 0 -r -m
+
+# to sync two nics
+#sudo phc2sys -s /dev/ptp1 -c /dev/ptp0 -O 0 -m
+
+
+#sudo tc qdisc add dev eno12409np1 clsact
+
+#sudo tc filter add dev eno12409np1 egress protocol 802.1Q flower vlan_id 359 action mirred egress mirror dev eno12399np0
+
+
+
+
+
+####### IN
+vlan_iface=$(ip route get 10.10.1.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap.pcap
+
+####### OUT
+
+vlan_iface=$(ip route get 10.10.3.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$vlan_iface" --time-stamp-precision=nano -s 64 -w egress_cap.pcap
+
+#sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" -j host --time-stamp-precision=nano -s 64 -w egress_cap.pcap
+
+
+#sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" -j adapter_unsynced --time-stamp-precision=nano -s 64 -w egress_cap.pcap
+
+
+
+
+
+tshark -r ingress_cap.pcap -T fields -e frame.time_epoch -e ip.src -e ip.dst -e tcp.srcport -e tcp.dstport -e tcp.seq -e tcp.seq_raw -e tcp.ack -e tcp.ack_raw -e tcp.len -e tcp.flags -e ip.id -E header=y -E separator=, -E occurrence=a > incap.csv
+
+tshark -r egress_cap.pcap -T fields -e frame.time_epoch -e ip.src -e ip.dst -e tcp.srcport -e tcp.dstport -e tcp.seq -e tcp.seq_raw -e tcp.ack -e tcp.ack_raw -e tcp.len -e tcp.flags -e ip.id -E header=y -E separator=, -E occurrence=a > outcap.csv
+
+c6525-25g
+w/ 20ms netem delay with ptp2 to system sync
+
+PING server-link-2 (10.10.3.2) 56(84) bytes of data.
+64 bytes from server-link-2 (10.10.3.2): icmp_seq=1 ttl=62 time=21.2 ms
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+2.284013276,10.10.1.1,10.10.3.2,0x7f96
+==> in_vlan_adap_unsync.csv <==
+2.284013276,10.10.1.1,10.10.3.2,0x7f96
+==> out_hwif_adap_unsync.csv <==
+2.284013276,10.10.1.1,10.10.3.2,0x7f96
+==> out_vlan_adap_unsync.csv <==
+2.284,013,276,10.10.1.1,10.10.3.2,0x7f96
+
+116us
+
+==> in_hwif_noj.csv <==
+2.284,129,773,10.10.1.1,10.10.3.2,0x7f96
+==> in_vlan_noj.csv <==
+2.284,129,773,10.10.1.1,10.10.3.2,0x7f96
+
+20ms
+
+==> out_vlan_noj.csv <==
+2.304,283,246,10.10.1.1,10.10.3.2,0x7f96
+
+9us
+
+==> out_hwif_noj.csv <==
+2.304,292,042,10.10.1.1,10.10.3.2,0x7f96
+
+
+
+
+c6525-25g
+w/o delay with ptp2 to system sync
+
+PING server-link-2 (10.10.3.2) 56(84) bytes of data.
+64 bytes from server-link-2 (10.10.3.2): icmp_seq=1 ttl=62 time=0.927 ms
+
+==> in_hwif_adap_unsync.csv <==
+2.863987339,10.10.1.1,10.10.3.2,0xe8e3
+==> in_vlan_adap_unsync.csv <==
+2.863987339,10.10.1.1,10.10.3.2,0xe8e3
+==> out_hwif_adap_unsync.csv <==
+2.863987339,10.10.1.1,10.10.3.2,0xe8e3
+==> out_vlan_adap_unsync.csv <==
+2.863,987,339,10.10.1.1,10.10.3.2,0xe8e3
+
+115us
+
+==> in_hwif_noj.csv <==
+2.864,102,933,10.10.1.1,10.10.3.2,0xe8e3
+==> in_vlan_noj.csv <==
+2.864,102,933,10.10.1.1,10.10.3.2,0xe8e3
+
+27us
+
+==> out_vlan_noj.csv <==
+2.864,129,232,10.10.1.1,10.10.3.2,0xe8e3
+
+7us
+
+==> out_hwif_noj.csv <==
+2.864,136,526,10.10.1.1,10.10.3.2,0xe8e3
+
+
+
+c6525-25g
+w/ 10ms netem delay with no sync
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+5.983506675,10.10.1.1,10.10.3.2,0x33d2
+==> in_vlan_adap_unsync.csv <==
+5.983506675,10.10.1.1,10.10.3.2,0x33d2
+==> out_hwif_adap_unsync.csv <==
+5.983506675,10.10.1.1,10.10.3.2,0x33d2
+==> out_vlan_adap_unsync.csv <==
+5.983,506,675,10.10.1.1,10.10.3.2,0x33d2
+
+124us
+
+==> in_hwif_noj.csv <==
+5.983,630,048,10.10.1.1,10.10.3.2,0x33d2
+==> in_vlan_noj.csv <==
+5.983,630,048,10.10.1.1,10.10.3.2,0x33d2
+
+10ms
+
+==> out_vlan_noj.csv <==
+5.993,745,492,10.10.1.1,10.10.3.2,0x33d2
+
+8us
+
+==> out_hwif_noj.csv <==
+5.993,753,126,10.10.1.1,10.10.3.2,0x33d2
+
+
+
+
+
+sudo tcpdump -i "$interface" vlan "$vlan_id" and icmp -j host --time-stamp-precision=nano -c 1 -w out_hwif_host.pcap
+
+sudo tcpdump -i "$interface" vlan "$vlan_id" and icmp -j adapter_unsynced --time-stamp-precision=nano -c 1 -w out_hwif_adap_unsync.pcap
+
+sudo tcpdump -i $vlan_iface icmp -c 1 -j host --time-stamp-precision=nano -w out_vlan_host.pcap
+
+sudo tcpdump -i $vlan_iface icmp -c 1 -j adapter_unsynced --time-stamp-precision=nano -w out_vlan_adap_unsync.pcap
+
+sudo tcpdump -i $vlan_iface icmp -c 1 -j adapter_unsynced --time-stamp-precision=nano -w in_vlan_adap_unsync.pcap
+
+sudo tcpdump -i $vlan_iface icmp -c 1 -j host --time-stamp-precision=nano -w in_vlan_host.pcap
+
+sudo tcpdump -i "$interface" vlan "$vlan_id" and icmp -j adapter_unsynced --time-stamp-precision=nano -c 1 -w in_hwif_adap_unsync.pcap
+
+sudo tcpdump -i "$interface" vlan "$vlan_id" and icmp -j host --time-stamp-precision=nano -c 1 -w in_hwif_host.pcap
+
+
+
+
+for pcap_file in *.pcap; do
+    csv_file="${pcap_file%.pcap}.csv"
+    echo "Processing $pcap_file -> $csv_file"
+    tshark -r "$pcap_file" -T fields \
+        -e frame.time_epoch -e ip.src -e ip.dst -e ip.id \
+        -E header=y -E separator=, -E occurrence=a > "$csv_file"
+done
+
+c6620
+w/o delay without sync
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750184635.817501646,10.10.1.1,10.10.3.2,0xabc7
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750184635.817501646,10.10.1.1,10.10.3.2,0xabc7
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750184635.817501646,10.10.1.1,10.10.3.2,0xabc7
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+5.817501646,10.10.1.1,10.10.3.2,0xabc7
+
+unsynced - negative time
+
+==> in_hwif_noj.csv <==
+4.458121866,10.10.1.1,10.10.3.2,0xabc7
+==> in_vlan_noj.csv <==
+4.458,121,866,10.10.1.1,10.10.3.2,0xabc7
+
+35us
+
+==> out_vlan_noj.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+4.458,156,826,10.10.1.1,10.10.3.2,0xabc7
+
+6us
+
+==> out_hwif_noj.csv <==
+4.458,162,754,10.10.1.1,10.10.3.2,0xabc7
+
+
+
+c6620
+w/o delay with ptp0 (enp23s0f0np0) to system sync
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437759455,10.10.1.1,10.10.3.2,0xad9c
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437759455,10.10.1.1,10.10.3.2,0xad9c
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437759455,10.10.1.1,10.10.3.2,0xad9c
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437759455,10.10.1.1,10.10.3.2,0xad9c
+
+
+==> in_hwif_noj.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437917945,10.10.1.1,10.10.3.2,0xad9c
+==> in_vlan_noj.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437917945,10.10.1.1,10.10.3.2,0xad9c
+
+
+==> out_hwif_noj.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437960799,10.10.1.1,10.10.3.2,0xad9c
+==> out_vlan_noj.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185131.437954598,10.10.1.1,10.10.3.2,0xad9c
+
+
+
+c6620
+w/o delay with ptp0 (enp23s0f0np0) to system sync
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056346473,10.10.1.1,10.10.3.2,0xbef0
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056346473,10.10.1.1,10.10.3.2,0xbef0
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056346473,10.10.1.1,10.10.3.2,0xbef0
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056,346,473,10.10.1.1,10.10.3.2,0xbef0
+
+51us
+
+==> in_hwif_host.csv <==
+1750185714.056524192,10.10.1.1,10.10.3.2,0xbef0
+==> in_vlan_host.csv <==
+1750185714.056,524,192,10.10.1.1,10.10.3.2,0xbef0
+
+35us
+
+==> out_vlan_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056,559,592,10.10.1.1,10.10.3.2,0xbef0
+
+6us
+
+==> out_hwif_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750185714.056,565,771,10.10.1.1,10.10.3.2,0xbef0
+
+
+
+
+c6620
+w/ 10 ms delay with ptp0 (enp23s0f0np0) to system sync
+
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186047.939214585,10.10.1.1,10.10.3.2,0x80ef
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186047.939214585,10.10.1.1,10.10.3.2,0x80ef
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186047.939214585,10.10.1.1,10.10.3.2,0x80ef
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186047.939,214,585,10.10.1.1,10.10.3.2,0x80ef
+
+171us
+
+==> in_hwif_host.csv <==
+1750186047.939,385,172,10.10.1.1,10.10.3.2,0x80ef
+==> in_vlan_host.csv <==
+1750186047.939,385,172,10.10.1.1,10.10.3.2,0x80ef
+
+10.044ms
+
+==> out_vlan_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186047.949,429,219,10.10.1.1,10.10.3.2,0x80ef
+
+9us
+
+==> out_hwif_host.csv <==
+1750186047.949,438,106,10.10.1.1,10.10.3.2,0x80ef
+
+
+
+c6620
+w/ 10 ms delay with ptp0 (enp23s0f0np0) to system sync
+with background iperf3 running and gettin 2.34gbps
+
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715296863,10.10.1.1,10.10.3.2,0x5be3
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715296863,10.10.1.1,10.10.3.2,0x5be3
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715296863,10.10.1.1,10.10.3.2,0x5be3
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715,296,863,10.10.1.1,10.10.3.2,0x5be3
+
+177us
+
+==> in_hwif_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715,473,314 , 10.10.1.1,10.10.3.2,0x5be3
+==> in_vlan_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750186930.715,473,314 ,10.10.1.1,10.10.3.2,0x5be3
+
+10.025ms
+
+==> out_vlan_host.csv <==
+1750186930.725,498,060 , 10.10.1.1,10.10.3.2,0x5be3
+
+1us
+
+==> out_hwif_host.csv <==
+1750186930.725,499,653 ,10.10.1.1,10.10.3.2,0x5be3
+
+
+
+
+c6620
+w/o delay with ptp0 (enp23s0f0np0) to system sync
+with background iperf3 running and gettin 2.34gbps
+
+
+==> in_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821191351,10.10.1.1,10.10.3.2,0xb9d5
+==> in_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821191351,10.10.1.1,10.10.3.2,0xb9d5
+==> out_hwif_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821191351,10.10.1.1,10.10.3.2,0xb9d5
+==> out_vlan_adap_unsync.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821,191,351 ,10.10.1.1,10.10.3.2,0xb9d5
+
+88us
+
+==> in_hwif_host.csv <==
+1750187346.821,279,568 ,10.10.1.1,10.10.3.2,0xb9d5
+==> in_vlan_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821,279,568 ,10.10.1.1,10.10.3.2,0xb9d5
+
+22us
+
+==> out_vlan_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821,301,762,10.10.1.1,10.10.3.2,0xb9d5
+
+7us
+
+==> out_hwif_host.csv <==
+frame.time_epoch,ip.src,ip.dst,ip.id
+1750187346.821,308,060,10.10.1.1,10.10.3.2,0xb9d5
+
+
+#################################################################
+
+
+6/18/25 exps - c6620 emulator
+one ingress on one int
+the other on different
+synching source ptp0 (enp) to system and eno (ptp1) 
+
+hw adap_sync in
+hw vlan out
+
+vlan_iface=$(ip route get 10.14.1.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w egress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.14.2.2 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j host --time-stamp-precision=nano -s 64 -w egress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.1.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap1.pcap
+
+
+#########################
+
+vlan_iface=$(ip route get 10.10.5.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap2.pcap
+
+
+#########################
+
+
+vlan_iface=$(ip route get 10.10.9.1 | grep -oP "(?<= dev )[^ ]+")
+vlan_id=$(echo "$vlan_iface" | grep -oP '\d+$')
+interface=$(ip -d link show "$vlan_iface" | sed -n 's/.*@\(.*\):.*/\1/p')
+echo $vlan_iface $vlan_id $interface
+
+sudo tcpdump -B 4096 -n -i "$interface" vlan "$vlan_id" and tcp dst portrange 50000-59600 -j adapter_unsynced --time-stamp-precision=nano -s 64 -w ingress_cap3.pcap
+
+
+
+
+
+
+
+
+
+
+
+
