@@ -47,6 +47,9 @@ rand_delay_m=$(expr $(expr 160000 \* 10 ) / $cap ) # 20 MB/cap(mbps) in ms x 10 
 #rand_delay_m=$(expr $(expr 320000 \* 10 ) / $cap ) # 40 MB/cap(mbps) in ms x 10 (8000/cap) 
 
 
+flow_size_cap_bytes=10000000000 # 10GB
+#flow_size_cap_bytes=1000000000 # 1GB
+#flow_size_cap_bytes=100000000 # 100MB
 
 
 # random first wait
@@ -72,7 +75,7 @@ while [ $SECONDS -lt $end ] && read line ; do
     payload=$line
 
     # increase cap to 1 GB		#correct zeros to change
-    if [ $payload -ge 2500 ] && [ $payload -le 10000000000 ] # ignore flow sizes larger than 1 GB and smaller than 2500B
+    if [ $payload -ge 2500 ] && [ $payload -le $flow_size_cap_bytes ] # ignore flow sizes larger than 1 GB and smaller than 2500B
     then
         flw_start_time=$(date +%s%N)
         iperf3 -c $destination -p $port_num -n $payload > ~/n$node_id-f$flow_gen_id/n$node_id-f$flow_gen_id-i$flow_ind.json # no longer output json, -J flag can be used
