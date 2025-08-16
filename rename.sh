@@ -1,6 +1,6 @@
 # TOOL TO BE USED TO RENAME EXPERIMENT FILE CAPTURES
 # use the desired N for LB and 100 for non-LB 
-exp_save_name='exp1-alg1-RTT20-N8-lam5-numgen160-wait20-cap4500-flowsizecap10000-cake'
+exp_save_name='exp1-alg1-RTT20-N100-lam5-numgen160-wait20-cap1000-flowsizecap10000'
 
 mv -i egress_cap1.pcap $exp_save_name-egress_cap1.pcap
 mv -i egress_cap2.pcap $exp_save_name-egress_cap2.pcap

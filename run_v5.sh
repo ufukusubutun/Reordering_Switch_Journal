@@ -2,22 +2,22 @@
 exp_save_names=()
 
 # Loop through cap
-for cap in 5000 #500 4500
+for cap in 1000 #500 4500
 do
     # Loop through lam 
     for lam in 5 # 9
     do
         # Loop through lam 
-        for numgen in 180 # 200 # 9
+        for numgen in 160 # 200 # 9
         do
             # Loop through N 8 100
-            for N in 8 #8 100
+            for N in 8 100 #8 100
             do
                 # Loop through base delay 10 20
                 for RTT in 20 # 20
                 do
                     # Loop through algs 1, 2, 3
-                    for alg in 1 #2 3
+                    for alg in 1 2 3 #2 3
                     do
 			for waittime in 20 # 20
 			do

@@ -17,9 +17,9 @@ keyfile="$location/.ssh/ufuk"
 
 # ----------------------------------------------------------- #
 # TODO SET THE EXPERIMENT DURATION HERE
-exp_time=35 
+exp_time=35 #305 #35
 # try to provide at least 10 more seconds for the exp_time_safe
-exp_time_safe=45 
+exp_time_safe=45 # 315 #45 
 # ----------------------------------------------------------- #
 
 
@@ -35,7 +35,7 @@ int2node_gen ()
 
 
 switch_cap[1]=45 # rate should not be smaller than N - (rate/N) intiger division gives 1
-switch_cap[2]=450
+switch_cap[2]=100
 switch_cap[3]=1000 #1000
 switch_cap[4]=2000
 switch_cap[5]=4500
@@ -99,7 +99,7 @@ buffer_scaler=250 ## value 250 corresponds to 2*BDP buffers, likewise 125 -> BDP
 # TODO SET THE CONFIGURATION TO USE, FOLLOW THE IF-ELSE STATEMENT TO SEE WHICH ONE IS USED
 # the first one is used in an if-else fashion
 # eg: if fair_q elif prob else debug mode
-fair_q=0 # uses fq with htb - corresponds to the non-LB configuration on the article
+fair_q=1 # uses fq with htb - corresponds to the non-LB configuration on the article
 prob=1 # uses htb with iptables tagging - corresponds to the LB configuration on the article
 # when both are set to 0, a third configuration of dubugging is used,
 # This config hashes flows generated at the 3 tor switches to 3 queues
@@ -143,7 +143,7 @@ do
 			do
 				# ----------------------------------------------------------- #
 				# TODO SET SWITCH CAPACITY AS AN INDEX to the array switch_cap above
-				for cap_ind in 5 # 4 3 2 1  #4 # switch capacity 4500 2000 1000 500 100
+				for cap_ind in 3 # 4 3 2 1  #4 # switch capacity 4500 2000 1000 500 100
 				# ----------------------------------------------------------- #
 				do
 					echo '************************'
