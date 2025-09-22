@@ -41,15 +41,15 @@ touch ~/n${node_id}_flowgen.log
 #rand_delay_m=$(expr $(expr 32000 \* 10 ) / $cap ) # 4 MB/cap(mbps) in ms x 10 (8000/cap)
 #rand_delay_m=$(expr $(expr 40000 \* 10 ) / $cap ) # 5 MB/cap(mbps) in ms x 10 (8000/cap) 
 #rand_delay_m=$(expr $(expr 80000 \* 10 ) / $cap ) # 10 MB/cap(mbps) in ms x 10 (8000/cap) 
-rand_delay_m=$(expr $(expr 160000 \* 10 ) / $cap ) # 20 MB/cap(mbps) in ms x 10 (8000/cap) 
-#rand_delay_m=$(expr $(expr 240000 \* 10 ) / $cap ) # 30 MB/cap(mbps) in ms x 10 (8000/cap) 
+#rand_delay_m=$(expr $(expr 160000 \* 10 ) / $cap ) # 20 MB/cap(mbps) in ms x 10 (8000/cap) 
+rand_delay_m=$(expr $(expr 240000 \* 10 ) / $cap ) # 30 MB/cap(mbps) in ms x 10 (8000/cap) 
 #rand_delay_m=$(expr $(expr 280000 \* 10 ) / $cap ) # 35 MB/cap(mbps) in ms x 10 (8000/cap) 
 #rand_delay_m=$(expr $(expr 320000 \* 10 ) / $cap ) # 40 MB/cap(mbps) in ms x 10 (8000/cap) 
 
 
 
-flow_size_cap_bytes=10000000000 # 10GB
-#flow_size_cap_bytes=1000000000 # 1GB
+#flow_size_cap_bytes=10000000000 # 10GB
+flow_size_cap_bytes=1000000000 # 1GB
 #flow_size_cap_bytes=100000000 # 100MB
 
 

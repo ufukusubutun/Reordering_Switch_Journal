@@ -17,9 +17,9 @@ keyfile="$location/.ssh/ufuk"
 
 # ----------------------------------------------------------- #
 # TODO SET THE EXPERIMENT DURATION HERE
-exp_time=35 #305 #35
+exp_time=300 #300 #30 #305 #35
 # try to provide at least 10 more seconds for the exp_time_safe
-exp_time_safe=45 # 315 #45 
+exp_time_safe=310 #310 #40 # 315 #45 
 # ----------------------------------------------------------- #
 
 
@@ -99,7 +99,7 @@ buffer_scaler=250 ## value 250 corresponds to 2*BDP buffers, likewise 125 -> BDP
 # TODO SET THE CONFIGURATION TO USE, FOLLOW THE IF-ELSE STATEMENT TO SEE WHICH ONE IS USED
 # the first one is used in an if-else fashion
 # eg: if fair_q elif prob else debug mode
-fair_q=1 # uses fq with htb - corresponds to the non-LB configuration on the article
+fair_q=0 # uses fq with htb - corresponds to the non-LB configuration on the article
 prob=1 # uses htb with iptables tagging - corresponds to the LB configuration on the article
 # when both are set to 0, a third configuration of dubugging is used,
 # This config hashes flows generated at the 3 tor switches to 3 queues
@@ -277,7 +277,7 @@ do
 
 					
 					#branch_rate=$(expr $(expr $network_capacity \* 1) / 3) #$(expr $(expr $network_capacity \* 5) / 3)
-					branch_rate=$(expr $(expr $network_capacity \* 2) / 3) #$(expr $(expr $network_capacity \* 5) / 3)
+					branch_rate=$(expr $(expr $network_capacity \* 5) / 10) #$(expr $(expr $network_capacity \* 5) / 3)
 
 					echo network_capacity = $network_capacity # btlnck_rate = $btlnck_rate\M \n
 				    burst_ceil=3100	
@@ -319,7 +319,7 @@ do
 
 					# ADDED for Non bottleneck
 					#branch_rate=$(expr $(expr $network_capacity \* 1) / 5) #$(expr $(expr $network_capacity \* 5) / 3)
-					branch_rate=$(expr $(expr $network_capacity \* 2) / 5) #$(expr $(expr $network_capacity \* 5) / 3)
+					branch_rate=$(expr $(expr $network_capacity \* 3) / 10) #$(expr $(expr $network_capacity \* 5) / 3)
 
 					index=0
 					for host in "${step1[@]}"
