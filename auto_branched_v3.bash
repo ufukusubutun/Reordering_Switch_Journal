@@ -276,10 +276,11 @@ do
 					done
 
 					
-					branch_rate=$(expr $(expr $network_capacity \* 1) / 3) #$(expr $(expr $network_capacity \* 5) / 3)
+					#branch_rate=$(expr $(expr $network_capacity \* 1) / 3) #$(expr $(expr $network_capacity \* 5) / 3)
+					branch_rate=$(expr $(expr $network_capacity \* 2) / 3) #$(expr $(expr $network_capacity \* 5) / 3)
 
 					echo network_capacity = $network_capacity # btlnck_rate = $btlnck_rate\M \n
-				       	burst_ceil=3100	
+				    burst_ceil=3100	
 
 
 					echo ""
@@ -317,8 +318,9 @@ do
 					echo "----commands on step1---"
 
 					# ADDED for Non bottleneck
-					branch_rate=$(expr $(expr $network_capacity \* 1) / 5) #$(expr $(expr $network_capacity \* 5) / 3)
-					
+					#branch_rate=$(expr $(expr $network_capacity \* 1) / 5) #$(expr $(expr $network_capacity \* 5) / 3)
+					branch_rate=$(expr $(expr $network_capacity \* 2) / 5) #$(expr $(expr $network_capacity \* 5) / 3)
+
 					index=0
 					for host in "${step1[@]}"
 					do
