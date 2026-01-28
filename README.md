@@ -11,8 +11,7 @@ We aim to evaluate the resilience of contemporary TCP loss detection algorithms 
 
 WORK IN PROGRESS! Please check back soon!
 
-<?--
-The experiments involve, generating thousands of flows at nodes located at the branches of a tree. This traffic is mixed and sent through an emulator node where we implement the effect of the desired switch architecture on software. And the traffic terminates at sinks. While the traffic traverses the switch, we collect packet header captures at the ingress and egress nodes of the 'emulator' node and post-process those to conduct measurements.
+<!-- The experiments involve, generating thousands of flows at nodes located at the branches of a tree. This traffic is mixed and sent through an emulator node where we implement the effect of the desired switch architecture on software. And the traffic terminates at sinks. While the traffic traverses the switch, we collect packet header captures at the ingress and egress nodes of the 'emulator' node and post-process those to conduct measurements.
 
 To reproduce the results you can follow the steps below, marked as **TODO**. In general terms, the procedure involves doing the following:
 
