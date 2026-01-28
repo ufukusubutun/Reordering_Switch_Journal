@@ -4,12 +4,17 @@ Ufuk Usubütün, Fraida Fund, Shivendra Panwar
 
 NYU Networks Research Group
 
-This repository contains all the source code and instructions necessary to run experiments and reproduce results from our paper: *Backbone Switches No Longer Need to Deliver Packets in Sequence* submitted to IEEE Open Journal of the Communication Society <!-- [(download pre-print here)](https://ufukusubutun.github.io/assets/pdf/ReorderingSwitch.pdf) --> This work is the extension of our conference paper which appeared at IEEE Conference on High Performance Switching and Routing, 2023 which was awarded the **BEST PAPER AWARD!** 
+This repository contains all the source code and instructions necessary to run experiments and reproduce results from our paper: *Backbone Switches No Longer Need to Deliver Packets in Sequence* submitted to IEEE Open Journal of the Communication Society <!-- [(download pre-print here)](https://ufukusubutun.github.io/assets/pdf/ReorderingSwitch.pdf) --> This work is the extension of our conference paper which appeared at IEEE Conference on High Performance Switching and Routing, 2023 which was awarded the best paper award! 
 
 We aim to evaluate the resilience of contemporary TCP loss detection algorithms under patterns of reordering that would be caused by a load-balanced switch located at the network core. The internet core typically has high line rates and large number of flows getting mixed. And the load-balanced switch we use to cunduct the evalutaion was inspired by the Load-Balanced Birkhoff-von Neumann Switch [design of C.S. Chang](https://web.stanford.edu/class/ee384y/Handouts/BVN-Switches-Chang.pdf)
 
 
 WORK IN PROGRESS! Please check back soon!
+
+When complete the repo will contain:
+* The implementation of our queueing simulator
+* The implementation of our G/G/1 model
+* Detailed instructions to run the testbed experiments in the paper
 
 <!-- The experiments involve, generating thousands of flows at nodes located at the branches of a tree. This traffic is mixed and sent through an emulator node where we implement the effect of the desired switch architecture on software. And the traffic terminates at sinks. While the traffic traverses the switch, we collect packet header captures at the ingress and egress nodes of the 'emulator' node and post-process those to conduct measurements.
 
