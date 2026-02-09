@@ -11,10 +11,12 @@ We aim to evaluate the resilience of contemporary TCP loss detection algorithms 
 
 WORK IN PROGRESS! Please check back soon!
 
-When complete the repo will contain:
-* The implementation of our queueing simulator
-* The implementation of our G/G/1 model
+This repo contains:
+* The implementation of our G/G/1 model that uses the QNA approximation by Whitt. (under gg1_model_implementation)
+* The implementation of our queueing simulator (under sims)
 * Detailed instructions to run the testbed experiments in the paper
+
+Instructions to run the distributed bottleneck scenario will be here soon. To run the experiments of the centralized bottleneck scenario, please check [this repo](https://github.com/ufukusubutun/Reordering_Switch) of our conference paper.
 
 <!-- The experiments involve, generating thousands of flows at nodes located at the branches of a tree. This traffic is mixed and sent through an emulator node where we implement the effect of the desired switch architecture on software. And the traffic terminates at sinks. While the traffic traverses the switch, we collect packet header captures at the ingress and egress nodes of the 'emulator' node and post-process those to conduct measurements.
 
