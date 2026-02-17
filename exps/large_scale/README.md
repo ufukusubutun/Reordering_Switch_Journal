@@ -1,6 +1,9 @@
 
+# Large Scale experiments (from Section 4)
 
-## Large Scale experiments (from Section 4)
+<img src="https://github.com/ufukusubutun/Reordering_Switch/blob/main/docs/topo.png"  width="40%" >
+
+In this page you'll find instructions to run the *the distributed bottleneck* scenario. To run the experiments of the *centralized bottleneck scenario*, please check [this repo](https://github.com/ufukusubutun/Reordering_Switch) of our conference paper.
 
 
 Cloudlab profile for the 24 node topology:
