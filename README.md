@@ -9,12 +9,14 @@ This repository contains all the source code and instructions necessary to run e
 We aim to evaluate the resilience of contemporary TCP loss detection algorithms under patterns of reordering that would be caused by a load-balanced switch located at the network core. The internet core typically has high line rates and large number of flows getting mixed. And the load-balanced switch we use to cunduct the evalutaion was inspired by the Load-Balanced Birkhoff-von Neumann Switch.
 
 
-WORK IN PROGRESS! Please check back soon!
-
 This repo contains:
-* The implementation of our G/G/1 model that uses the QNA approximation by Whitt. (under gg1_model_implementation)
-* The implementation of our queueing simulator (under sims)
-* Detailed instructions to run the testbed experiments in the paper (under exps)
+* [The implementation of our G/G/1 model](https://github.com/ufukusubutun/Reordering_Switch_Journal/blob/main/gg1.ipynb) that uses the QNA approximation by Whitt.
+* [The implementation of our queueing simulator](https://github.com/ufukusubutun/Reordering_Switch_Journal/blob/main/sims.ipynb) and evaluation examples with backbone packet traces.
+* Detailed instructions to run the testbed experiments in the paper (under [exps](https://github.com/ufukusubutun/Reordering_Switch_Journal/tree/main/exps))
+
+
+WORK IN PROGRESS!
+
 
 
 <!-- The experiments involve, generating thousands of flows at nodes located at the branches of a tree. This traffic is mixed and sent through an emulator node where we implement the effect of the desired switch architecture on software. And the traffic terminates at sinks. While the traffic traverses the switch, we collect packet header captures at the ingress and egress nodes of the 'emulator' node and post-process those to conduct measurements.
