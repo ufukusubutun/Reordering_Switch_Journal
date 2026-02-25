@@ -7,8 +7,7 @@ We want to run a single TCP flow through the line topology above and insert cont
 
 ## Setup
 
-Cloudlab profile for the 4 node line topology:
-https://www.cloudlab.us/p/nyunetworks/four-server-line
+Cloudlab [profile for the 4 node line topology](https://www.cloudlab.us/p/nyunetworks/four-server-line)
 
 Bring up this cloudlab profile. (You'll need a Cloudlab account!)
 
@@ -181,8 +180,8 @@ And then at the end of the experiment look at the number of packet drops by exam
 
 You can now refer to the `illustrative_exp_post_proc.ipynb` in this folder to continue working with the traces we have just captured.
 
-You can also find the resulting captures we used in the paper here:
+You can also find the resulting captures we used in the paper [here](https://drive.google.com/file/d/1yKY2KmC7Pn7kE6ydGtIwCMnrkYPBeWe3/view?usp=drive_link)
 
-And below is some statistics.
+And below is some statistics for those traces.
 
-<img src="https://github.com/ufukusubutun/Reordering_Switch_Journal/blob/main/exps/illustrative/illus_exp_results.png"  width="60%" >
+<img src="https://github.com/ufukusubutun/Reordering_Switch_Journal/blob/main/exps/illustrative/illus_exp_results.png"  width="45%" >
