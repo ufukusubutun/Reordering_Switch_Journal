@@ -113,58 +113,76 @@ If something seems wrong you can use the following command to remove the rule an
 We will need two terminals at the client node.
 
 
+Let us first set up which loss detection algorithm we want to use. 
+
+(Keep in mind that the `net.ipv4.tcp_recovery` command is constantly evolving. It should produce the outcome we observed if you use the profile which uses Ubuntu 20. Later versions of the kernel removed support for dupthresh. So using the numbers below may produce different outcomes.)
+
+To conduct an experiment with RACK, run the following at the sender:
+
+	sudo sysctl -w net.ipv4.tcp_recovery=1 net.ipv4.tcp_max_reordering=300 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
+
+To conduct an experiment with adapThresh (dupthresh with Linux adaptive threshold), run the following at the sender:
+
+	sudo sysctl -w net.ipv4.tcp_recovery=0 net.ipv4.tcp_max_reordering=300 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
+
+To conduct an experiment with dupThresh (dupthresh with a fixed threshold of 3), run the following at the sender:
+
+	sudo sysctl -w net.ipv4.tcp_recovery=0 net.ipv4.tcp_max_reordering=3 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
 
 
-#rack
-sudo sysctl -w net.ipv4.tcp_recovery=1 net.ipv4.tcp_max_reordering=300 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
-#adapthresh
-sudo sysctl -w net.ipv4.tcp_recovery=0 net.ipv4.tcp_max_reordering=300 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
-#dupack
-sudo sysctl -w net.ipv4.tcp_recovery=0 net.ipv4.tcp_max_reordering=3 net.ipv4.tcp_sack=1 net.ipv4.tcp_dsack=1 net.ipv4.tcp_no_metrics_save=1
 
-
-
-——————
-
-
-
-at server
+Setup the packet capture by running this at server:
 
 	sudo tcpdump -i $IF_BACK -f "tcp and (src 10.10.1.1 or dst 10.10.1.1)" -s 96 -w ~/capture.pcap
 
-at client 
+Setup high resolution cwnd capture at the sender size by running the following at the sender:
+
+	# become root
+	sudo su
+	# one time only
+	apt install trace-cmd
+	# repeat on each reboot
+	echo 1 > /sys/kernel/debug/tracing/events/tcp/tcp_probe/enable
+	# start capture
+	trace-cmd record --date -e tcp_probe
+
+We will setup `iperf` and run our single TCP flow. At server run (and keep it running):
+
+	iperf3 -s 
+
+Now start the TCP flow. At the second terminal window of sender run (this will run for 35 seconds):
+
+	iperf3 -c server -t 35
 
 
 
-# become root
-sudo su
+After flow ends, use Ctrl+C to stop recording the cwnd and packet captures in the corresponding terminals.
 
-# one time only
-apt install trace-cmd
+Save the output of the cwnd capture to a file:
 
-# repeat on each reboot
-echo 1 > /sys/kernel/debug/tracing/events/tcp/tcp_probe/enable
-
-# before each connection
-trace-cmd record --date -e tcp_probe
+	trace-cmd report > expname-log.txt
 
 
-iperf3 -c server -t 35
+You can repeat the experiment as you like with different loss detection algorithms, more frequent reordering, or different base delays! 
 
-iperf3 -s 
+If you would also like to capture packet drops that will happen at the bottleneck node (to compare against instances of reordering misdesignated as loss) you can remove the forward direction qdisc at the bottleneck and reinstantiate it before each experiment
 
+	sudo tc qdisc del dev $IF root  
+	sudo tc qdisc add dev $IF root handle 1: htb default 3  
+	sudo tc class add dev $IF parent 1:2 classid 1:3 htb rate 10Mbit  
+	sudo tc qdisc add dev $IF parent 1:3 bfifo limit 0.8mbit 
 
+And then at the end of the experiment look at the number of packet drops by examining:
 
-# after flow ends, use Ctrl+C to stop recording
-# then play back with
-trace-cmd report
-
-trace-cmd report > expname-log.txt
-
-
-
-
+	tc -s -d class show dev $IF
+	tc -s -d qdisc show dev $IF
 
 ## Post processing
 
 You can now refer to the `illustrative_exp_post_proc.ipynb` in this folder to continue working with the traces we have just captured.
+
+You can also find the resulting captures we used in the paper here:
+
+And below is some statistics.
+
+<img src="https://github.com/ufukusubutun/Reordering_Switch_Journal/blob/main/exps/illustrative/illus_exp_results.png"  width="60%" >
