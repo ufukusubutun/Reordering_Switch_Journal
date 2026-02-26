@@ -9,7 +9,7 @@ We want to run a single TCP flow through the line topology above and insert cont
 
 Cloudlab [profile for the 4 node line topology](https://www.cloudlab.us/p/nyunetworks/four-server-line)
 
-Bring up this cloudlab profile. (You'll need a Cloudlab account!)
+Bring up this Cloudlab profile. (You'll need a Cloudlab account!)
 
 
 

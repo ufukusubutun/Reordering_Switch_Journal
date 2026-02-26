@@ -3,11 +3,22 @@
 
 <img src="https://github.com/ufukusubutun/Reordering_Switch/blob/main/docs/topo.png"  width="40%" >
 
-In this page you'll find instructions to run the *the distributed bottleneck* scenario. To run the experiments of the *centralized bottleneck scenario*, please check [this repo](https://github.com/ufukusubutun/Reordering_Switch) of our conference paper.
+To run the experiments of the *centralized bottleneck scenario*, please check [this repo](https://github.com/ufukusubutun/Reordering_Switch) of our conference paper.
+
+In this page you'll find instructions to run the *the distributed bottleneck* scenario. While the topologies are the same, experiment parameters and instructions will differ in key places. These updated parameters were obtained after a detailed consideration of backbone packet traces and traffic patterns observed in those networks.
+
+
 
 
 Cloudlab profile for the 24 node topology:
 https://www.cloudlab.us/p/nyunetworks/branch-reord-nonbtlnck-pub
+
+Bring up this Cloudlab profile. (You'll need a Cloudlab account!)
+
+
+
+*Detailed instructions will appear here*
+
 
 
 ## General description of all scripts in this repo
